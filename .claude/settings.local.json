@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(playwright-cli)",
+      "Bash(playwright-cli install:*)",
+      "Bash(playwright-cli:*)",
+      "WebSearch"
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+# 認証情報
+.env
+*.auth-state.json
+
+# playwright-cli
+.playwright-cli/
+test-result-*.png
+
+# OS
+.DS_Store
