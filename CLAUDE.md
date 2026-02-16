@@ -11,5 +11,22 @@
 
 ### テストシナリオ
 
-- テストシナリオは `test-suites/` に `.md` 形式で配置する
-- 実行は `/playwright-cli @test-suites/{ファイル名}.md` で行う
+- テストシナリオは `test-suites/{案件名}/` フォルダに `.md` 形式で配置する
+- テストデータ（CSV等）も同じフォルダに配置する
+- 実行は `/playwright-cli @test-suites/{案件名}/{ファイル名}.md` で行う
+
+### 環境変数
+
+- グローバルのデフォルト値はルートの `.env` に定義する
+- 案件固有の環境変数は `test-suites/{案件名}/.env` に定義し、ルートの値を上書きする
+- テスト実行時は案件フォルダの `.env` → ルート `.env` の優先順位で読み込む
+
+### テスト実行ワークフロー
+
+1. テスト設計を `test-suites/{案件名}/test_suite.md` に配置
+2. `/plan-test {案件名}` でテスト計画を生成（`task.md`）
+3. `/playwright-cli @test-suites/{案件名}/test_suite.md` でテスト実行
+4. `/plan-test {案件名}` で進捗確認・HITL
+5. 全シナリオ完了後、`task.md` が最終結果レポートになる
+
+詳細ルール: `.claude/rules/test-workflow.md`
