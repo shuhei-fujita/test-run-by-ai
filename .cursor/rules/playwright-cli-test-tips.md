@@ -1,0 +1,1 @@
+../../.claude/rules/playwright-cli-test-tips.md
