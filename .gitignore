@@ -6,6 +6,11 @@
 .playwright-cli/
 test-results/
 
+# playwright-cli 中間ファイルの誤配置ガード（ルート直下に出た場合）
+/page-*.yml
+/console-*.log
+/network-*.log
+
 
 # OS
 .DS_Store
@@ -13,4 +18,3 @@ test-results/
 *.csv
 
 test-suites/
-
