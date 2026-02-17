@@ -1,7 +1,7 @@
 {
   "browser": {
     "launchOptions": {
-      "headless": false
+      "headless": true
     }
   }
 }

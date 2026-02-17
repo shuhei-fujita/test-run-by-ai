@@ -55,18 +55,18 @@ cp .env.example .env
 Claude Code で `/playwright-cli` スキルと `@` でファイルを指定してテストを実行する：
 
 ```
-# テストシナリオを渡して実行（ヘッドレスモード）
-> /playwright-cli @test-suites/{案件名}/{案件名}.md --headless で実行して
+# テストシナリオを渡して実行（デフォルト：ヘッドレスモード）
+> /playwright-cli @test-suites/{案件名}/{案件名}.md
 
 # 個別のブラウザ操作も可能
 > /playwright-cli playwright.dev で "locator" を検索してスクリーンショットを撮って
 ```
 
-内部的には `playwright-cli open` 時の `--headed` フラグで制御される：
+playwright-cli はデフォルトでヘッドレスモード。ブラウザ画面を表示したい場合は `--headed` を付ける：
 
 ```bash
-playwright-cli open https://example.com           # ブラウザ画面表示（デフォルト：ヘッドデッドモード）
-playwright-cli open https://example.com --headless   # ヘッドレスモード
+playwright-cli open https://example.com           # ヘッドレスモード（デフォルト）
+playwright-cli open https://example.com --headed   # ブラウザ画面を表示
 ```
 
 ### テスト結果の管理
