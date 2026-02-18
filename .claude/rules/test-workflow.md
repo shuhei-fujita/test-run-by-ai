@@ -10,7 +10,7 @@
 
 ```
 test-suites/{案件名}/
-  ├── test_suite.md   # テスト設計（Gherkin形式、Devinが生成）
+  ├── test_suite.md   # テスト設計（Gherkin形式）
   ├── task.md          # テスト実行計画・進捗管理（/plan-test が生成）
   ├── .env             # 案件固有の環境変数（任意）
   └── *.csv            # テストデータ（任意）
