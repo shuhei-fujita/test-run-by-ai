@@ -18,4 +18,10 @@ test-results/
 *.csv
 *.xlsx
 
-test-suites/
+test-suites/*
+# サンプルテストスイートは git 管理対象
+!test-suites/youtube-search/
+!test-suites/playwright-search/
+
+docs/*
+!docs/ROI.md
