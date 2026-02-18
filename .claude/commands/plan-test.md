@@ -81,7 +81,7 @@ tags: [testing, planning, progress]
    - ダウンロード系 → DLファイル確認
    - API通信系 → API傍受
    - その他 → スクリーンショット
-6. `.claude/rules/test-workflow.md` の task.md フォーマット仕様に従って `test-suites/$ARGUMENTS/task.md` に書き出す
+6. `.claude/rules/test-workflow.md` の task.md フォーマット仕様に従って `test-suites/$ARGUMENTS/task.md` に書き出す。結果保存先のタイムスタンプは **JST（日本標準時）** で生成する
 7. 進捗サマリの初期値を設定する（全件「未実行」）
 8. AskUserQuestion で「この計画で実行開始しますか？」と確認する
 

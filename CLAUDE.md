@@ -10,8 +10,8 @@
 
 ### テスト結果の保存
 
-- 結果は `test-results/{YYYYMMDDHHmm}_{テストスイート名}/` に保存する
-  - 例: `test-results/202602142307_youtube-search/`
+- 結果は `test-results/{YYYYMMDDHHmm_JST}_{テストスイート名}/` に保存する
+  - 例: `test-results/202602142307_youtube-search/`（タイムスタンプはJST）
 - スクリーンショットのファイル名は `TC-X-Y_{scenario名}.png` とする
   - 例: `TC-1-3_カテゴリフィルター(技術)の適用.png`
   - テストIDがないシナリオは `{scenario名}.png` のままでよい

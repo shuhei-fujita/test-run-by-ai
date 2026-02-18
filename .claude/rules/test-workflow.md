@@ -23,7 +23,7 @@ test-suites/{案件名}/
 
 ## 環境情報
 - URL: {テストスイート内のURL}
-- 結果保存先: test-results/{YYYYMMDDHHmm}_{案件名}/
+- 結果保存先: test-results/{YYYYMMDDHHmm_JST}_{案件名}/
 
 ## 進捗サマリ
 | 合計 | PASS | FAIL | SKIP | BLOCKED | 未実行 |
