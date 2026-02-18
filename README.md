@@ -1,20 +1,16 @@
-# test-run-by-ai
+# gherkin-player
 
-自然言語で書いたテストシナリオ（Markdown）を **Claude Code + playwright-cli** で実行し、ブラウザ操作を自動テストするフレームワーク。
+Gherkin シナリオ（Markdown）を **Claude Code + playwright-cli** でブラウザ上に再生し、テスト実行を自動化するツールキット。
 
 ## どういうもの？
 
 ```
-テストシナリオ (Markdown/Gherkin)
-        │
-        ▼
-  Claude Code が解釈
-        │
-        ▼
-  playwright-cli でブラウザ操作
-        │
-        ▼
-  スクリーンショット + 結果レポート
+[人間]  テストシナリオを用意 (Gherkin)
+           │
+[AI]    Claude Code が解釈・実行
+        playwright-cli でブラウザ操作
+           │
+[人間]  スクリーンショット・動画で結果を確認・合否判定
 ```
 
 - テストコードを書かずに、**日本語のシナリオ**でブラウザテストを実行できる
