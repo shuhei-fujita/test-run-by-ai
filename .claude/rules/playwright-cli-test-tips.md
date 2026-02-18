@@ -181,12 +181,31 @@ playwright-cli run-code "async page => {
 - FAIL時は失敗時の画面状態を **必ず** 撮影
 - 長い操作フローでは **3ステップに1回以上** 撮影する
 
-### 動画録画（トレース）
+### 動画録画（`--video` オプション）
 
-操作フローが複雑で静止画では追いにくい場合、`run-code` 内でビデオ録画する:
+`/playwright-cli` 起動時に `--video` を指定すると、テスト実行全体を動画（WebM）で録画する。
+
+```
+> /playwright-cli --video @test-suites/youtube-search/test_suite.md
+```
+
+**動作:**
+1. ブラウザ起動後に `playwright-cli video-start` を実行
+2. 通常通りテストシナリオを実行（スクリーンショットも併用可）
+3. テスト完了時に `playwright-cli video-stop` で保存
+
+**出力先:** `test-results/{timestamp}_{案件名}/video.webm`
+
+**注意:**
+- 録画中はオーバーヘッドが発生し、テスト実行が若干遅くなる
+- 長時間のテストではファイルサイズが大きくなる
+- トークン消費量はスクリーンショットのみの場合と変わらない（動画の開始・停止コマンドが増えるだけ）
+
+### トレース（デバッグ用）
+
+操作フローのデバッグには `tracing` が有効。動画と異なり、DOMスナップショット・ネットワーク・コンソールログを記録する。
 
 ```bash
-# ビデオ付きの新しいコンテキストで操作する
 playwright-cli run-code "async page => {
   const context = page.context();
   await context.tracing.start({ screenshots: true, snapshots: true });
@@ -199,7 +218,7 @@ playwright-cli run-code "async page => {
 }"
 ```
 
-録画したトレースは `npx playwright show-trace test-results/trace.zip` で確認可能。
+トレースは `npx playwright show-trace test-results/trace.zip` で確認可能。
 
 ## 6. セッション管理
 
