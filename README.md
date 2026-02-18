@@ -23,15 +23,18 @@ playwright-cli install-browser
 ```
 .
 ├── .claude/
+│   ├── commands/                  # カスタムコマンド（/plan-test 等）
+│   ├── rules/                     # テスト運用ルール
 │   └── skills/
 │       └── playwright-cli/        # playwright-cli スキル定義
 ├── test-suites/                   # 案件ごとにフォルダを分けて管理
 │   └── {案件名}/
-│       ├── {案件名}.md            # テストシナリオ
+│       ├── test_suite.md          # テストシナリオ（Gherkin形式）
+│       ├── task.md                # テスト実行計画・進捗管理（/plan-test が生成）
 │       ├── .env                   # 案件固有の環境変数（任意、ルート .env を上書き）
 │       └── *.csv                  # テストデータ（任意）
 ├── test-results/                  # テスト実行結果（スクリーンショット等）
-├── .env.example                   # 環境変数のテンプレート
+├── .env                           # グローバルの環境変数
 └── .gitignore
 ```
 
@@ -52,13 +55,18 @@ cp .env.example .env
 
 ## 使い方
 
-Claude Code で `/playwright-cli` スキルと `@` でファイルを指定してテストを実行する：
+### テスト実行ワークフロー
 
 ```
-# テストシナリオを渡して実行（デフォルト：ヘッドレスモード）
-> /playwright-cli @test-suites/{案件名}/{案件名}.md
+1. テスト設計を test-suites/{案件名}/test_suite.md に配置
+2. /plan-test {案件名}  → テスト計画を生成（task.md）
+3. /playwright-cli @test-suites/{案件名}/test_suite.md  → テスト実行
+4. /plan-test {案件名}  → 進捗確認
+```
 
-# 個別のブラウザ操作も可能
+### 個別のブラウザ操作
+
+```
 > /playwright-cli playwright.dev で "locator" を検索してスクリーンショットを撮って
 ```
 
@@ -71,12 +79,14 @@ playwright-cli open https://example.com --headed   # ブラウザ画面を表示
 
 ### テスト結果の管理
 
-テスト結果は `test-results/{YYYYMMDDHHmm}_{案件名}/` に保存される：
+テスト結果は `test-results/{YYYYMMDDHHmm}_{案件名}/` に保存される。
+スクリーンショットのファイル名にはテストIDがあればプレフィックスとして付与される：
 
 ```
 test-results/
 └── {YYYYMMDDHHmm}_{案件名}/
-    ├── {シナリオ名}.png
+    ├── TC-X-Y_{シナリオ名}.png   # テストIDありの場合
+    ├── {シナリオ名}.png           # テストIDなしの場合
     └── ...
 ```
 
