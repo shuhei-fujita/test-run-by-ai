@@ -153,10 +153,11 @@ playwright-cli run-code "async page => {
 **命名規則:**
 ```bash
 # test-results/{timestamp}_{テストスイート名}/ 配下に保存
-# ファイル名は操作内容がわかる名前にする
-playwright-cli screenshot test-results/202602160300_案件名/01_初期表示.png
-playwright-cli screenshot test-results/202602160300_案件名/02_入力後.png
-playwright-cli screenshot test-results/202602160300_案件名/03_保存結果.png
+# ファイル名は TC-X-Y_{scenario名}.png（IDがないシナリオは {scenario名}.png）
+# 連番プレフィックス（01_, 02_ 等）は使用禁止
+playwright-cli screenshot test-results/202602160300_案件名/TC-1-1_初期表示確認.png
+playwright-cli screenshot test-results/202602160300_案件名/TC-1-2_フォーム入力後の確認.png
+playwright-cli screenshot test-results/202602160300_案件名/TC-1-3_保存結果の確認.png
 ```
 
 **run-code 内での連続撮影（推奨）:**
@@ -166,12 +167,12 @@ playwright-cli run-code "async page => {
 
   // 操作1 → スクショ
   await page.getByRole('textbox', { name: '名前' }).fill('テスト太郎');
-  await page.screenshot({ path: dir + '/01_入力後.png', scale: 'css' });
+  await page.screenshot({ path: dir + '/TC-1-2_フォーム入力後の確認.png', scale: 'css' });
 
   // 操作2 → スクショ
   await page.getByRole('button', { name: '保存' }).click();
   await page.waitForTimeout(1500);
-  await page.screenshot({ path: dir + '/02_保存結果.png', scale: 'css' });
+  await page.screenshot({ path: dir + '/TC-1-3_保存結果の確認.png', scale: 'css' });
 }"
 ```
 
