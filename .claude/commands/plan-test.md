@@ -46,8 +46,8 @@ tags: [testing, planning, progress]
 - 案件フォルダの `.env` またはルートの `.env` に以下が定義されているか確認する:
   - `TEST_USER_EMAIL` — 未設定なら警告
   - `TEST_USER_PASSWORD` — 未設定なら警告
-  - `TEST_BASE_URL` — 未設定なら警告
-- test_suite.md 内のURL（冒頭のURL行）と `.env` の `TEST_BASE_URL` を比較し、ホストが異なる場合は警告する
+  - `BASE_URL` — 未設定なら警告
+- test_suite.md 内のURL（冒頭のURL行）と `.env` の `BASE_URL` を比較し、ホストが異なる場合は警告する
 
 **テストデータチェック:**
 - test_suite.md の Scenario 内に以下のキーワードがあるか検索する:
