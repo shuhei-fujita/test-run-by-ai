@@ -47,7 +47,7 @@ Gherkin シナリオ（Markdown）を **Claude Code + playwright-cli** でブラ
 ### 1. リポジトリのクローン
 
 ```bash
-git clone https://github.com/<your-org>/test-run-by-ai.git
+git clone https://github.com/shuhei-fujita/gherkin-player.git
 cd test-run-by-ai
 ```
 
@@ -131,6 +131,14 @@ claude
 # ステップ 3: 進捗・結果を確認
 > /plan-test youtube-search
 ```
+
+実行の様子をリアルタイムで見たい場合は `--headed` を付けるとブラウザが表示される：
+
+```
+> /playwright-cli --headed @test-suites/youtube-search/test_suite.md
+```
+
+> テスト結果の確認は `test-results/` 配下のスクリーンショットで行える。headed モードは実行中の動作を目視で追いたい場合に使う。
 
 実行後、以下が生成される：
 
@@ -216,21 +224,6 @@ test-results/
 ```
 > /playwright-cli https://example.com を開いてタイトルのスクリーンショットを撮って
 ```
-
-### playwright-cli 主要コマンド
-
-| コマンド                           | 説明                        |
-| ---------------------------------- | --------------------------- |
-| `playwright-cli open <url>`        | ブラウザを起動してURLに遷移 |
-| `playwright-cli snapshot`          | ページの要素構造を取得      |
-| `playwright-cli click <ref>`       | 要素をクリック              |
-| `playwright-cli fill <ref> "text"` | テキスト入力                |
-| `playwright-cli screenshot`        | スクリーンショット撮影      |
-| `playwright-cli state-save <file>` | 認証状態の保存              |
-| `playwright-cli state-load <file>` | 認証状態の復元              |
-| `playwright-cli close`             | ブラウザを閉じる            |
-
-詳細は `.claude/skills/playwright-cli/SKILL.md` を参照。
 
 ## トラブルシューティング
 

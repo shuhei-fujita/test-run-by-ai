@@ -34,14 +34,11 @@ playwright-cli の環境セットアップを行うコマンド。
 
 playwright-cli が未インストールの場合のみ実行する。
 
-**正式パッケージ名: `@playwright/cli`**（npmjs.com 上の名前）。`@anthropic-ai/playwright-cli` 等の別名は存在しない。必ずこのパッケージ名を使うこと。
+以下を実行する:
 
-AskUserQuestion でインストール方法を確認する:
-
-- **npm グローバル (推奨)**: `npm install -g @playwright/cli`
-- **Homebrew**: `brew install playwright-cli`
-
-ユーザーが選択した方法でインストールを実行する。
+```bash
+npm install -g @playwright/cli
+```
 
 ### Step 3: Playwright ブラウザのインストール
 
