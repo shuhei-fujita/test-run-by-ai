@@ -160,6 +160,27 @@ playwright-cli screenshot test-results/202602160300_案件名/TC-1-2_フォー�
 playwright-cli screenshot test-results/202602160300_案件名/TC-1-3_保存結果の確認.png
 ```
 
+**viewport / fullPage の使い分け:**
+
+スクリーンショットはデフォルトでviewport（表示領域）のみ撮影する。`--full-page`（fullPage）はスクロール可能なページ全体を撮影する。検証対象に応じて使い分ける:
+
+| 検証対象 | 撮影方法 | 理由 |
+|---|---|---|
+| 一覧テーブルの全行確認 | `--full-page` | テーブル下部が見切れるため |
+| 画面全体のレイアウト確認 | `--full-page` | ヘッダー〜フッターまで検証対象 |
+| トースト/フラッシュメッセージ | viewport（デフォルト） | 画面上部に表示されるのでviewportで十分 |
+| ダイアログ/モーダル | viewport（デフォルト） | 画面中央に表示される。fullPageだと余白が増える |
+| フォーム入力・ボタン操作後 | viewport（デフォルト） | 操作対象がフォーカス範囲内 |
+| エラー表示の確認 | viewport（デフォルト） | エラーUI（トースト等）は画面上部 |
+
+```bash
+# CLI: --full-page オプション
+playwright-cli screenshot --full-page --filename=test-results/.../TC-6-1_一覧全体.png
+
+# run-code: fullPage: true
+await page.screenshot({ path: dir + '/TC-6-1_一覧全体.png', scale: 'css', fullPage: true });
+```
+
 **run-code 内での連続撮影（推奨）:**
 ```bash
 playwright-cli run-code "async page => {
@@ -222,8 +243,52 @@ playwright-cli run-code "async page => {
 
 ## 6. セッション管理
 
+### 案件ごとに名前付きセッションを使う（必須）
+
+複数の案件（テストスイート）を同時に実行する場合、**必ず案件ごとに名前付きセッション (`-s=`) を使う**。`default` セッションの共有は禁止。
+
+```bash
+# 良い例: 案件ごとにセッションを分離
+playwright-cli -s=customItem open https://example.com   # カスタム項目テスト用
+playwright-cli -s=driver open https://example.com        # ドライバーマスタテスト用
+
+# 悪い例: default セッションを共有（干渉する）
+playwright-cli open https://example.com
+```
+
+**理由:**
+- 同一セッション内では route 設定・ページ遷移・スナップショットが共有され干渉する
+- 別セッションなら完全に独立したブラウザで動作するため安全
+
+**セッション名の規則:**
+- 案件フォルダ名から簡潔な英字名を付ける（例: `customItem`, `driver`, `paymentCondition`）
+- 単一案件のみ実行する場合でも名前付きセッションを使う
+
+**全コマンドにセッション指定が必要:**
+```bash
+playwright-cli -s=customItem snapshot
+playwright-cli -s=customItem click e5
+playwright-cli -s=customItem screenshot --filename=path/to/file.png
+playwright-cli -s=customItem run-code "async page => { ... }"
+playwright-cli -s=customItem close
+```
+
+### セッション操作前の確認（必須）
+
+`close` や `close-all` を実行する前に、**必ず `playwright-cli list` で稼働中セッションを確認する**。他の案件が使用中のセッションを誤って閉じないこと。
+
+```bash
+# 必ず先に確認
+playwright-cli list
+
+# 自分のセッションだけを閉じる
+playwright-cli -s=customItem close
+```
+
+### クラッシュ対策
+
 - `run-code` で複雑な操作（`page.goto` + `route` の組み合わせ等）を行うとセッションがクラッシュすることがある
-- クラッシュ時は `playwright-cli open` で再起動し、ログインからやり直す
+- クラッシュ時は `playwright-cli -s={セッション名} open` で再起動し、ログインからやり直す
 - 長時間テストではセッション切れが起こり得るため、定期的に `snapshot` で生存確認する
 
 ## 7. ファイル出力先の注意
