@@ -34,12 +34,11 @@ playwright-cli の環境セットアップを行うコマンド。
 
 playwright-cli が未インストールの場合のみ実行する。
 
-AskUserQuestion でインストール方法を確認する:
+以下を実行する:
 
-- **npm グローバル (推奨)**: `npm install -g @playwright/cli`
-- **Homebrew**: `brew install playwright-cli`
-
-ユーザーが選択した方法でインストールを実行する。
+```bash
+npm install -g @playwright/cli
+```
 
 ### Step 3: Playwright ブラウザのインストール
 
