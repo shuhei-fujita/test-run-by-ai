@@ -75,6 +75,7 @@ test-suites/{案件名}/
 
 - **スクリーンショット**: `test-results/{timestamp}_{案件名}/` に保存。ファイル名は `TC-X-Y_{scenario名}.png`（IDがないシナリオは `{scenario名}.png`）。連番プレフィックス（`01_` 等）は使用禁止。ルート直下やtest-suites内に出力しない
 - **再実行（リトライ）結果**: 初回フォルダのSSは上書きせず、新しいtimestampフォルダ `test-results/{timestamp}_{案件名}_retry/` に保存する。task.md の環境情報に `再実行結果:` 行を追記する。初回FAILの証跡を残すことで「何を再実行したか」が明確になる
+- **トレース**: 全シナリオで常時記録する。シナリオ単位の場合は `test-results/{timestamp}_{案件名}/traces/TC-X-Y_{scenario名}.trace.zip`、セッション単位の場合は `test-results/{timestamp}_{案件名}/trace.zip` に保存する。閲覧は `npx playwright show-trace {path}` で行う。詳細は `playwright-cli-test-tips.md` を参照
 - **中間ファイル（YAML/ログ）**: `.playwright-cli/` 内のみ。プロジェクトルートや `test-suites/` に YAML を配置しない
 - **`page.screenshot()` の path 指定**: 必ず `test-results/` または `.playwright-cli/` のフルパスを指定する。`'screenshot.png'` のような相対パスは禁止
 - YAML（`.yml`/`.yaml`）ファイルがルートや `test-suites/` に生成された場合は業務データとの混在リスクがあるため、発見次第削除する

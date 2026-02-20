@@ -222,24 +222,74 @@ playwright-cli run-code "async page => {
 - 長時間のテストではファイルサイズが大きくなる
 - トークン消費量はスクリーンショットのみの場合と変わらない（動画の開始・停止コマンドが増えるだけ）
 
-### トレース（デバッグ用）
+### トレース（全シナリオで常時ON）
 
-操作フローのデバッグには `tracing` が有効。動画と異なり、DOMスナップショット・ネットワーク・コンソールログを記録する。
+全テストシナリオでトレースを記録する。DOMスナップショット・ネットワーク・コンソールログが残るため、FAIL時の原因調査に使える。スクリーンショットの代わりにはならないので併用する。
+
+**粒度の選択（運用比較中）:**
+
+現在、以下の2方式を試行中。運用してみて片方に絞る。
+
+#### 方式A: シナリオ単位
+
+シナリオごとに `tracing.start()` / `tracing.stop()` する。FAILのトレースだけピンポイントで開ける。
 
 ```bash
 playwright-cli run-code "async page => {
+  const dir = 'test-results/202602160300_案件名';
   const context = page.context();
+
+  // TC-1-1 開始
   await context.tracing.start({ screenshots: true, snapshots: true });
 
   // テスト操作...
-  await page.getByRole('button', { name: '実行' }).click();
-  await page.waitForTimeout(2000);
+  await page.getByRole('button', { name: '保存' }).click();
+  await page.waitForTimeout(1500);
+  await page.screenshot({ path: dir + '/TC-1-1_保存結果.png', scale: 'css' });
 
-  await context.tracing.stop({ path: 'test-results/trace.zip' });
+  // TC-1-1 終了
+  await context.tracing.stop({ path: dir + '/traces/TC-1-1_保存結果.trace.zip' });
 }"
 ```
 
-トレースは `npx playwright show-trace test-results/trace.zip` で確認可能。
+**出力先:** `test-results/{timestamp}_{案件名}/traces/TC-X-Y_{scenario名}.trace.zip`
+
+#### 方式B: セッション単位
+
+テスト実行の最初に `tracing.start()`、最後に `tracing.stop()` で1ファイル。管理が楽。
+
+```bash
+# テスト開始時
+playwright-cli run-code "async page => {
+  await page.context().tracing.start({ screenshots: true, snapshots: true });
+}"
+
+# ... 全シナリオ実行 ...
+
+# テスト終了時
+playwright-cli run-code "async page => {
+  await page.context().tracing.stop({ path: 'test-results/202602160300_案件名/trace.zip' });
+}"
+```
+
+**出力先:** `test-results/{timestamp}_{案件名}/trace.zip`
+
+#### 閲覧方法
+
+```bash
+npx playwright show-trace test-results/202602160300_案件名/traces/TC-6-3_APIエラー表示.trace.zip
+# または
+npx playwright show-trace test-results/202602160300_案件名/trace.zip
+```
+
+#### 比較表
+
+| | シナリオ単位 | セッション単位 |
+|---|---|---|
+| ファイル数 | シナリオ数と同じ（例: 47個） | 1個 |
+| FAIL調査 | 該当ファイルを直接開ける | タイムラインから該当箇所を探す |
+| 実装コスト | 各シナリオ前後でstart/stop | テスト開始/終了の2回だけ |
+| ファイルサイズ | 個々は小さい | 1ファイルが大きい |
 
 ## 6. セッション管理
 
