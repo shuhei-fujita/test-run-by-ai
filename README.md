@@ -48,7 +48,7 @@ Gherkin シナリオ（Markdown）を **Claude Code + playwright-cli** でブラ
 
 ```bash
 git clone https://github.com/shuhei-fujita/gherkin-player.git
-cd test-run-by-ai
+cd gherkin-player
 ```
 
 ### 2. `/install` で一括セットアップ
@@ -95,89 +95,48 @@ cp .env.example .env
 `.env` を編集し、テスト対象の URL や認証情報を設定する。
 サンプルのテストスイート（`youtube-search`、`playwright-search`）は認証不要なため、この手順はスキップ可能。
 
-## 動作確認（Quick Start）
-
-clone 直後に以下を実行して、環境が正しくセットアップされたか確認できる。
-
-### 方法 1: 対話的に試す
-
-Claude Code を起動し、自然言語でブラウザ操作を指示する。
-
-```bash
-claude
-```
-
-```
-> /playwright-cli playwright.dev を開いて "locator" で検索し、スクリーンショットを撮って
-```
-
-`test-results/` 配下にスクリーンショットが保存されれば成功。
-
-### 方法 2: サンプルテストスイートを実行する
-
-リポジトリに同梱されている `youtube-search` のテストスイートを使って、テスト実行ワークフロー全体を試す。
-
-```bash
-claude
-```
-
-```
-# ステップ 1: テスト計画を生成
-> /plan-test youtube-search
-
-# ステップ 2: テストを実行
-> /playwright-cli @test-suites/youtube-search/test_suite.md
-
-# ステップ 3: 進捗・結果を確認
-> /plan-test youtube-search
-```
-
-実行の様子をリアルタイムで見たい場合は `--headed` を付けるとブラウザが表示される：
-
-```
-> /playwright-cli --headed @test-suites/youtube-search/test_suite.md
-```
-
-> テスト結果の確認は `test-results/` 配下のスクリーンショットで行える。headed モードは実行中の動作を目視で追いたい場合に使う。
-
-実行後、以下が生成される：
-
-- `test-suites/youtube-search/task.md` — テスト計画と結果レポート
-- `test-results/{YYYYMMDDHHmm}_youtube-search/` — スクリーンショット
-
-## プロジェクト構成
-
-```
-.
-├── .claude/
-│   ├── commands/                  # カスタムコマンド（/plan-test 等）
-│   ├── rules/                     # テスト運用ルール
-│   └── skills/
-│       └── playwright-cli/        # playwright-cli スキル定義
-├── test-suites/                   # テストスイート（案件ごとにフォルダ管理）
-│   ├── youtube-search/            # サンプル: YouTube検索テスト
-│   ├── playwright-search/         # サンプル: Playwrightドキュメント検索テスト
-│   └── {案件名}/
-│       ├── test_suite.md          # テストシナリオ（Gherkin形式）
-│       ├── task.md                # テスト計画・進捗管理（/plan-test が生成）
-│       ├── .env                   # 案件固有の環境変数（任意、ルート .env を上書き）
-│       └── *.csv                  # テストデータ（任意）
-├── test-results/                  # テスト実行結果（自動生成、git管理外）
-├── .env.example                   # 環境変数のテンプレート
-└── .tool-versions                 # Node.js バージョン指定
-```
-
 ## 使い方
 
 ### テスト実行ワークフロー
 
 ```
-1. test-suites/{案件名}/test_suite.md にテストシナリオを配置
-2. /plan-test {案件名}            → テスト計画を生成（task.md）
-3. /playwright-cli @test-suites/{案件名}/test_suite.md  → テスト実行
-4. /plan-test {案件名}            → 進捗確認・HITL（人の判断が必要な箇所で一時停止）
-5. 全シナリオ完了後、task.md が最終結果レポートになる
+1. [人間] test-suites/{案件名}/test_suite.md にテストシナリオを配置
+2. [AI] /plan-test {案件名}            → テスト計画を生成（task.md）
+3. [AI] /playwright-cli @test-suites/{案件名}/task.md  → テスト実行
+4. [AI] 全シナリオ完了後、task.md が最終結果レポートになる
+5. [人間] スクリーンショット・動画で結果を確認・合否判定
 ```
+
+サンプルの `youtube-search` で試す場合：
+
+```
+claude
+
+# 1. テストシナリオを配置
+
+# 2. テスト計画を生成
+> /plan-test @test-suites/youtube-search
+
+# 3. テストを実行
+> /playwright-cli @test-suites/youtube-search/task.md
+
+# 4. 進捗・結果を確認
+> /plan-test @test-suites/youtube-search/task.md
+
+# 5. 最終結果レポートを確認
+ls -la test-results/
+```
+
+実行の様子をリアルタイムで見たい場合は `--headed` を付けるとブラウザが表示される：
+
+```
+> /playwright-cli --headed @test-suites/{案件名}/task.md
+```
+
+実行後、以下が生成される：
+
+- `test-suites/{案件名}/task.md` — テスト計画と結果レポート
+- `test-results/{YYYYMMDDHHmm}_{案件名}/` — スクリーンショット
 
 ### テストシナリオの書き方
 
@@ -217,12 +176,27 @@ test-results/
     └── ...
 ```
 
-### 個別のブラウザ操作
-
-テストスイートを使わず、自然言語で直接ブラウザを操作することもできる：
+## プロジェクト構成
 
 ```
-> /playwright-cli https://example.com を開いてタイトルのスクリーンショットを撮って
+.
+├── .claude/
+│   ├── commands/                  # カスタムコマンド（/plan-test 等）
+│   ├── rules/                     # テスト運用ルール
+│   └── skills/
+│       └── playwright-cli/        # playwright-cli スキル定義
+├── test-suites/                   # テストスイート（案件ごとにフォルダ管理）
+│   ├── youtube-search/            # サンプル: YouTube検索テスト
+│   ├── playwright-search/         # サンプル: Playwrightドキュメント検索テスト
+│   └── {案件名}/
+│       ├── test_suite.md          # テストシナリオ（Gherkin形式）
+│       ├── task.md                # テスト計画・進捗管理（/plan-test が生成）
+│       ├── .env                   # 案件固有の環境変数（任意、ルート .env を上書き）
+│       └── *.csv                  # テストデータ（任意）
+├── test-results/                  # Gherkin テスト証跡（自動生成、git管理外）
+├── playwright-results/            # Playwright E2E テスト出力（自動生成、git管理外）
+├── .env.example                   # 環境変数のテンプレート
+└── .tool-versions                 # Node.js バージョン指定
 ```
 
 ## トラブルシューティング

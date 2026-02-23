@@ -8,6 +8,7 @@ test-results/
 
 # Playwright Test
 node_modules/
+playwright-results/
 playwright-report/
 blob-report/
 
@@ -30,3 +31,7 @@ test-suites/*
 
 docs/*
 !docs/ROI.md
+
+# ベータ版
+test-design.md
+design-test.md
