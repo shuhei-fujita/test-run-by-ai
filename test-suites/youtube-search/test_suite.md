@@ -1,3 +1,4 @@
+<!-- 移管先: e2e/youtube-search.spec.ts -->
 Feature: YouTube動画検索
 
   YouTubeで検索機能が正しく動作することを確認する

@@ -6,6 +6,11 @@
 .playwright-cli/
 test-results/
 
+# Playwright Test
+node_modules/
+playwright-report/
+blob-report/
+
 # playwright-cli 中間ファイルの誤配置ガード（ルート直下に出た場合）
 /page-*.yml
 /console-*.log

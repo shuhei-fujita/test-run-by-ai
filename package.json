@@ -1,0 +1,9 @@
+{
+  "name": "gherkin-player",
+  "private": true,
+  "devDependencies": {
+    "@playwright/test": "^1.50.0",
+    "@types/node": "^25.3.0",
+    "typescript": "^5.7.0"
+  }
+}

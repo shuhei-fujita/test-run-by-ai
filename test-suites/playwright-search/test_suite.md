@@ -1,3 +1,4 @@
+<!-- 移管先: e2e/playwright-search.spec.ts -->
 Feature: Playwrightドキュメント検索
 
   Playwrightの公式サイトで検索機能が正しく動作することを確認する
