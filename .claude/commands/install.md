@@ -27,20 +27,29 @@ playwright-cli の環境セットアップを行うコマンド。
 ```
 📋 環境チェック
   Node.js:        v22.14.0 ✓
-  playwright-cli:  未インストール → Step 2 でインストールします
+  playwright-cli:  v0.1.0 → Step 2 で最新版に更新します
 ```
 
-### Step 2: playwright-cli インストール
-
-playwright-cli が未インストールの場合のみ実行する。
+### Step 2: playwright-cli インストール / 更新
 
 以下を実行する:
 
 ```bash
-npm install -g @playwright/cli
+npm install -g @playwright/cli@latest
 ```
 
-### Step 3: Playwright ブラウザのインストール
+- 未インストールの場合: 新規インストール
+- インストール済みの場合: 最新版に更新
+
+### Step 3: スキルファイルの更新
+
+playwright-cli のスキルファイル（`.claude/skills/playwright-cli/`）を最新化する。
+
+```bash
+playwright-cli install --skills
+```
+
+### Step 4: Playwright ブラウザのインストール
 
 `playwright-cli open` でブラウザ起動を試みる前に、Chromium がインストール済みか確認する。
 
@@ -55,7 +64,7 @@ npx playwright install chromium
 
 既にインストール済みの場合はスキップする。
 
-### Step 4: 動作確認
+### Step 5: 動作確認
 
 ```bash
 playwright-cli --version
